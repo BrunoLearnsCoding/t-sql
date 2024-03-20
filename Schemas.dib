@@ -1,0 +1,15 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"languageName":"csharp","name":"csharp"}]}}
+
+#!csharp
+
+#r "nuget:Microsoft.DotNet.Interactive.SqlServer,*-*"
+
+#!csharp
+
+#!connect mssql --kernel-name StackOverflowClone "Server=172.16.8.198,1435;Persist Security Info=False;Encrypt=False;User ID=sa;Password=Obst@1354;Initial Catalog=StackOverflowClone;"
+
+#!sql
+
+IF EXISTS(SELECT * FROM sys.database WHERE name='') 
