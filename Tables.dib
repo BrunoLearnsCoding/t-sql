@@ -16,10 +16,20 @@
 
 #!sql-StackOverflowClone
 
-#!sql-StackOverflowClone
-
 CREATE TABLE dbo.Players (
     id INT IDENTITY NOT NULL,
     Name NVARCHAR(50) NOT NULL,
     Position NVARCHAR(20)
 )
+
+#!sql-StackOverflowClone
+
+DROP TABLE dbo.Players
+
+#!sql-StackOverflowClone
+
+CREATE SCHEMA Sales
+
+#!sql-StackOverflowClone
+
+ 
