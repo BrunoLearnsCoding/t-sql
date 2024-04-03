@@ -17,7 +17,9 @@ internal class Program
         using (IDbConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();
-            answers = connection.Query<Answer>("SELECT TOP 10 * FROM Answers");
+            answers = connection.Query<Answer>(
+                "SELECT TOP 10 * FROM Answers"
+                );
         }
 
         foreach (var answer in answers) {

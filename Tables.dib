@@ -1,10 +1,10 @@
 #!meta
 
-{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"languageName":"csharp","name":"csharp"},{"aliases":[],"languageName":"T-SQL","name":"sql-StackOverflowClone"}]}}
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"languageName":"csharp","name":"csharp"},{"aliases":[],"languageName":"T-SQL","name":"sql-StackOverflowClone"},{"aliases":[],"languageName":"T-SQL","name":"sql-TSQLFundamentals"}]}}
 
 #!markdown
 
-# Creating Tables
+# Creating, changing and deleting tables 
 
 #!csharp
 
@@ -12,19 +12,89 @@
 
 #!csharp
 
-#!connect mssql --kernel-name StackOverflowClone "Server=172.16.8.198,1435;Persist Security Info=False;Encrypt=False;User ID=sa;Password=Obst@1354;Initial Catalog=StackOverflowClone;"
+#!connect mssql --kernel-name TSQLFundamentals "Server=172.16.8.198,1435;Persist Security Info=False;Encrypt=False;User ID=sa;Password=Obst@1354;Initial Catalog=StackOverflowClone;"
+
+#!sql-TSQLFundamentals
+
+USE TSQLFundamentals;
+
+DROP TABLE IF EXISTS dbo.Employees;
+
+CREATE TABLE dbo.Employees (
+	employee_id INT IDENTITY NOT NULL,
+	first_name NVARCHAR(50),
+	last_name NVARCHAR(50) NOT NULL,
+	ssn INT NOT NULL
+);
+
+#!sql-TSQLFundamentals
+
+/* This statement creates orders table */
+
+CREATE TABLE dbo.Orders (
+    order_id INT IDENTITY NOT NULL,
+    order_date DATE NOT NULL,
+    customer_id INT NOT NULL,
+    
+);
+
+#!sql-TSQLFundamentals
+
+ALTER TABLE dbo.Employees 
+    ADD CONSTRAINT PK_Employees
+    PRIMARY KEY (employee_id);
+
+#!sql-TSQLFundamentals
+
+ALTER TABLE dbo.Orders 
+    ADD CONSTRAINT PK_Orders
+    PRIMARY KEY (order_id);
+
+#!sql-TSQLFundamentals
+
+ALTER TABLE dbo.Employees 
+    ADD CONSTRAINT UNQ_Employees_ssn
+    UNIQUE(ssn)
+
+#!sql-TSQLFundamentals
+
+CREATE TABLE dbo.OrderItems (
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity DECIMAL NOT NULL,
+    price MONEY
+    CONSTRAINT PK_OrderItems
+        PRIMARY KEY (order_id, product_id)
+);
+
+#!sql-TSQLFundamentals
+
+CREATE TABLE Products (
+    product_id INT IDENTITY NOT NULL,
+    product_description NVARCHAR(100) NOT NULL,
+    manufacturer INT NOT NULL,
+    min_order_qty DECIMAL
+    CONSTRAINT PK_Products 
+        PRIMARY KEY (product_id)
+);
+
+#!sql-TSQLFundamentals
+
+ALTER TABLE dbo.OrderItems 
+    ADD CONSTRAINT FK_OrderItems_Products
+    FOREIGN KEY (product_id)
+    REFERENCES dbo.Products(product_id);
+
+#!sql-TSQLFundamentals
+
+ALTER TABLE dbo.OrderItems 
+    ADD CONSTRAINT FK_Orders
+    FOREIGN KEY (order_id)
+    REFERENCES dbo.Orders(order_id)
 
 #!sql-StackOverflowClone
 
-CREATE TABLE dbo.Players (
-    id INT IDENTITY NOT NULL,
-    Name NVARCHAR(50) NOT NULL,
-    Position NVARCHAR(20)
-)
-
-#!sql-StackOverflowClone
-
-DROP TABLE dbo.Players
+DROP TABLE dbo.Employees;
 
 #!sql-StackOverflowClone
 
