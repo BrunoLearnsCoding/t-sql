@@ -14,17 +14,42 @@
 
 #!connect mssql --kernel-name TSQLFundamentals "Server=172.16.8.198,1435;Persist Security Info=False;Encrypt=False;User ID=sa;Password=Obst@1354;Initial Catalog=StackOverflowClone;"
 
+#!markdown
+
+## Naming conventions
+
+Table: Camel Case
+
+Primary keys : PK_[table name]
+
+Foreign keys : FK_[table name]_[referenced table name]
+
+Unique constraints : UNQ_[table name]_[column name]
+
+Default constraints : DFT_[table name]_[column name]
+
+#!markdown
+
+# Database Identifiers - Naming obligations
+
+When naming objects in SQL server you should follow these rules from Microsoft :
+
+[Database Identifiers](https://learn.microsoft.com/en-us/sql/relational-databases/databases/database-identifiers?view=sql-server-ver16)
+
 #!sql-TSQLFundamentals
 
 USE TSQLFundamentals;
 
 DROP TABLE IF EXISTS dbo.Employees;
 
+/* Creates a table */
+/* Note: The statement defines explictitly ssn column as nullable */
+
 CREATE TABLE dbo.Employees (
 	employee_id INT IDENTITY NOT NULL,
 	first_name NVARCHAR(50),
 	last_name NVARCHAR(50) NOT NULL,
-	ssn INT NOT NULL
+	ssn NVARCHAR(20) NULL
 );
 
 #!sql-TSQLFundamentals
@@ -55,6 +80,11 @@ ALTER TABLE dbo.Orders
 ALTER TABLE dbo.Employees 
     ADD CONSTRAINT UNQ_Employees_ssn
     UNIQUE(ssn)
+
+#!sql-TSQLFundamentals
+
+ALTER TABLE dbo.Employees
+	ALTER COLUMN ssn NVARCHAR(30);
 
 #!sql-TSQLFundamentals
 
@@ -90,16 +120,13 @@ ALTER TABLE dbo.OrderItems
 ALTER TABLE dbo.OrderItems 
     ADD CONSTRAINT FK_Orders
     FOREIGN KEY (order_id)
-    REFERENCES dbo.Orders(order_id)
+    REFERENCES dbo.Orders(order_id);
+
+#!sql-TSQLFundamentals
+
+ALTER TABLE dbo.OrderItems 
+    ADD CHECK (quantity > 0);
 
 #!sql-StackOverflowClone
 
 DROP TABLE dbo.Employees;
-
-#!sql-StackOverflowClone
-
-CREATE SCHEMA Sales
-
-#!sql-StackOverflowClone
-
- 

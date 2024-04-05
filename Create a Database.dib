@@ -1,0 +1,78 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"languageName":"csharp","name":"csharp"}]}}
+
+#!markdown
+
+# How to create a Database
+
+Before creating a database, we should know about collations.
+
+#!markdown
+
+## What is Collation?
+
+**Collation in SQL Server** refers to the rules and settings that govern how data is sorted, compared, and searched within character columns (such as `VARCHAR`, `NVARCHAR`, and `CHAR`). Let's dive into the details:
+
+1. **Purpose of Collation**:
+   - **Sorting Order**: Collations determine the order in which characters are sorted. For example, whether uppercase letters come before or after lowercase letters.
+   - **Case Sensitivity**: Some collations are case-sensitive (e.g., "A" and "a" are distinct), while others are case-insensitive (e.g., "A" and "a" are treated as the same).
+   - **Accent Sensitivity**: Collations can also consider accents (diacritics) when comparing characters (e.g., "é" vs. "e").
+
+2. **Types of Collations**:
+   - **Windows Collations**: These collations follow Windows sorting rules and are suitable for most applications.
+   - **SQL Server Collations**: These collations are specific to SQL Server and provide consistent behavior across different platforms.
+
+3. **Where Collations Are Used**:
+   - **Database Level**: You can set the default collation for an entire database during its creation.
+   - **Table Column Level**: You can specify a collation for individual character columns when creating or altering a table.
+   - **Expression Level**: The `COLLATE` clause can be used in expressions to apply collations temporarily.
+
+4. **Inheritance**:
+   - If not explicitly specified, databases inherit the default collation of the SQL Server instance.
+   - Columns inherit the default collation of the database unless explicitly set.
+
+5. **Example**:
+   - Suppose you have a database with the default collation `SQL_Latin1_General_CP1_CI_AS` (case-insensitive, accent-sensitive).
+   - If you create a table without specifying a collation for a character column, that column will use the default collation of the database.
+
+6. **Changing Collation**:
+   - To change the collation of an existing column, use the `ALTER TABLE` statement with the `COLLATE` clause.
+   - For example:
+     ```sql
+     ALTER TABLE MyTable
+     ALTER COLUMN MyColumn NVARCHAR(50) COLLATE Latin1_General_BIN;
+     ```
+     This changes the collation of `MyColumn` to a binary collation (case-sensitive, accent-sensitive).
+
+Remember that collations impact sorting, searching, and comparison operations. Choose the collation that aligns with your application's requirements. 📊🔍
+
+For more detailed information, you can refer to the [official Microsoft documentation on COLLATE](https://learn.microsoft.com/en-us/sql/t-sql/statements/collations?view=sql-server-ver16) ¹.
+
+Source: Conversation with Bing, 4/5/2024
+(1) COLLATE (Transact-SQL) - SQL Server | Microsoft Learn. https://learn.microsoft.com/en-us/sql/t-sql/statements/collations?view=sql-server-ver16.
+(2) SQL Server Collation - GeeksforGeeks. https://www.geeksforgeeks.org/sql-server-collation/.
+(3) What collation to use for SQL Server database? - Stack Overflow. https://stackoverflow.com/questions/6871498/what-collation-to-use-for-sql-server-database.
+(4) Set or Change the Server Collation - SQL Server | Microsoft Learn. https://learn.microsoft.com/en-us/sql/relational-databases/collations/set-or-change-the-server-collation?view=sql-server-ver16.
+
+#!markdown
+
+### How to find out what collations are supported by your SQL server?
+
+#!sql
+
+/* SQL Collations supported by the SQL server */
+SELECT * FROM sys.fn_helpcollations() WHERE name LIKE 'SQL%';
+
+/* Windows Collations supported by the SQL server */
+SELECT * FROM sys.fn_helpcollations() WHERE [name] NOT LIKE N'SQL%';
+
+#!markdown
+
+### Create a Databse with persian collation
+
+#!sql
+
+/* The collation is 'Case Insensetive', 'Accent Insensetive' and supports 'Supplamentary Characters' and UTF8 */
+
+CREATE DATABASE DatabaseName COLLATE Persian_100_CI_AI_SC_UTF8;

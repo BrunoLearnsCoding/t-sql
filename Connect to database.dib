@@ -29,7 +29,6 @@ if you don't set encrypt to false, you will get a certification error
 
 #!connect mssql --kernel-name StackOverflowClone "Server=172.16.8.198,1435;Persist Security Info=False;Encrypt=False;User ID=sa;Password=Obst@1354;Initial Catalog=StackOverflowClone;"
 
-#!sql
-
 #!sql-StackOverflowClone
+
 select top 5 TagName from Tags;

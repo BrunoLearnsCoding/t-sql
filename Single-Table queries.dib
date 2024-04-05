@@ -17,3 +17,15 @@
 #!sql-TSQLV6
 
 SELECT * FROM HR.Employees WHERE country='USA'
+
+#!markdown
+
+## Logical order of processing a SELECT statement :
+
+
+1. FROM
+2. WHERE
+3. GROUP BY
+4. HAVING
+5. SELECT
+6. ORDER BY
