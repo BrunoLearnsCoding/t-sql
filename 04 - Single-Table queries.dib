@@ -1,0 +1,76 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"languageName":"csharp","name":"csharp"},{"aliases":[],"languageName":"T-SQL","name":"sql-TSQLV6"}]}}
+
+#!markdown
+
+# Single-Table queries 
+
+#!csharp
+
+#r "nuget:Microsoft.DotNet.Interactive.SqlServer,*-*"
+
+#!csharp
+
+#!connect mssql --kernel-name TSQLV6 "Server=172.16.8.198,1435;Persist Security Info=False;Encrypt=False;User ID=sa;Password=Obst@1354;Initial Catalog=TSQLV6;"
+
+#!sql-TSQLV6
+
+SELECT * FROM HR.Employees WHERE country='USA'
+
+#!markdown
+
+## Logical order of processing a SELECT statement :
+
+
+1. FROM
+2. WHERE
+3. GROUP BY
+4. HAVING
+5. SELECT
+6. ORDER BY
+
+#!markdown
+
+### How logical processing works? 
+
+#!sql
+
+/* The order in witch the SQL Server executes a query
+
+NOTE : You cannot write the query in correct logical order. You have to start with the SELECT clause
+*/
+FROM Sales.Orders
+WHERE custid = 71
+GROUP BY empid, YEAR(orderdate)
+HAVING COUNT(*) > 1
+SELECT empid, YEAR(orderdate) AS orderyear, COUNT(*) AS numorders
+ORDER BY empid, orderyear
+/*
+Or, to present it in a more readable manner, here’s what the statement does:
+1. Queries the rows from the Sales.Orders table
+2. Filters only orders where the customer ID is equal to 71
+3. Groups the orders by employee ID and order year
+4. Filters only groups (employee ID and order year) having more than one order
+5. Selects (returns) for each group the employee ID, order year, and number of orders
+6. Orders (sorts) the rows in the output by employee ID and order year
+
+#!markdown
+
+## FROM clause
+
+
+From clause is where you spectify name of the tables you want to query.
+
+Use always schema-qualify object names in your code unless SQL Server **must** resolve it implicitly 
+based on its implicit name-resolution rules.
+
+#!sql
+
+FROM Sales.Orders
+
+#!markdown
+
+### WHERE Clause
+
+Filters the rows returned by the FROM phase

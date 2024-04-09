@@ -65,28 +65,43 @@ CREATE TABLE dbo.Orders (
 
 #!sql-TSQLFundamentals
 
+/* Adding a primary key constraint */
+
 ALTER TABLE dbo.Employees 
     ADD CONSTRAINT PK_Employees
     PRIMARY KEY (employee_id);
 
 #!sql-TSQLFundamentals
 
+/* Creating a table with primary key constraint */
 ALTER TABLE dbo.Orders 
     ADD CONSTRAINT PK_Orders
     PRIMARY KEY (order_id);
 
 #!sql-TSQLFundamentals
 
+/* Adding a UNIQUE constraint to an existing table */
 ALTER TABLE dbo.Employees 
     ADD CONSTRAINT UNQ_Employees_ssn
     UNIQUE(ssn)
 
+/* If there are two rows containing NULLs in ssn, Microsoft SQL Server complains and
+won't let you to create a UNIQUE constraint on this field. In this situation, 
+you should create an unique index instead of a UNIQUE constraint 
+
+*/
+
+CREATE UNIQUE INDEX idx_ssn_notnull ON dbo.Employees(ssn) WHERE ssn IS NOT NULL;
+
 #!sql-TSQLFundamentals
 
+/* Changing a column in a table */
 ALTER TABLE dbo.Employees
 	ALTER COLUMN ssn NVARCHAR(30);
 
 #!sql-TSQLFundamentals
+
+/* Creating a table and primary key constraint */
 
 CREATE TABLE dbo.OrderItems (
     order_id INT NOT NULL,
@@ -99,6 +114,8 @@ CREATE TABLE dbo.OrderItems (
 
 #!sql-TSQLFundamentals
 
+/* Creating a table and primary key constraint */
+
 CREATE TABLE Products (
     product_id INT IDENTITY NOT NULL,
     product_description NVARCHAR(100) NOT NULL,
@@ -110,6 +127,8 @@ CREATE TABLE Products (
 
 #!sql-TSQLFundamentals
 
+/* Adding a foreign key constraint to a table */
+
 ALTER TABLE dbo.OrderItems 
     ADD CONSTRAINT FK_OrderItems_Products
     FOREIGN KEY (product_id)
@@ -117,12 +136,16 @@ ALTER TABLE dbo.OrderItems
 
 #!sql-TSQLFundamentals
 
+/* Adding a foreign key constraint to a table */
+
 ALTER TABLE dbo.OrderItems 
     ADD CONSTRAINT FK_Orders
     FOREIGN KEY (order_id)
     REFERENCES dbo.Orders(order_id);
 
 #!sql-TSQLFundamentals
+
+/* Adding a CHECK constraint to a table */
 
 ALTER TABLE dbo.OrderItems 
     ADD CHECK (quantity > 0);
